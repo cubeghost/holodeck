@@ -1,0 +1,472 @@
+// vim:noet:ai:sw=4:ts=4
+
+html {
+	height: 100%
+}
+
+body.holodeck {
+	-webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+	background-color:#4C297A;
+	background-image:linear-gradient(0deg,#4C297A,#061528);
+	font-family:$calibre;
+	color:white;
+	background-attachment:fixed;
+	max-width:1232px;
+	margin:40px auto;
+
+	a {
+		color: $indigo;
+		text-decoration: none;
+	}
+
+	header {
+		margin-bottom:20px;
+		padding:10px;
+		font-size:42px;
+		font-weight:bold;
+		opacity:0.8;
+	}
+
+	.clearfix {
+		display:table;
+		clear:both;
+		float:none;
+	}
+
+	::-webkit-input-placeholder {
+		color:rgba(255,255,255,0.4);
+	}
+
+	:-moz-placeholder,
+	::-moz-placeholder {
+		color:rgba(255,255,255,0.4);
+	}
+
+	// upload
+
+	section.upload {
+		max-width:1232px;
+		width:100%;
+		position:absolute;
+		margin-bottom:120px;
+		transition:200ms transform ease-out;
+	}
+	section.upload.hidden {
+		transform:translateY(-380px);
+	}
+
+	.dropzone {
+		font-size:24px;
+		height:300px;
+		width:100%;
+		position:relative;
+		background:rgba(255,255,255,0.15);
+		border-width:0;
+		transition:100ms background ease-out,
+					200ms transform ease-out;
+	}
+
+	.dropzone.active {
+		background:rgba(255,255,255,0.35);
+	}
+
+	.dropzone.done,.dropzone.hidden {
+		opacity:0;
+		transform:translateY(-50%)
+	}
+
+	.dropzone>div {
+		padding:10px 40px;
+		&:first-of-type {padding-top:40px;}
+		&:last-of-type {padding-bottom:40px;}
+	}
+
+	#upload-type {
+		display:none;
+	}
+
+	#upload-type + label {
+		height:36px;
+		display:block;
+		font-size:18px;
+		cursor:pointer;
+		background-image:repeating-linear-gradient(90deg,rgba(255,255,255,0.1),rgba(255,255,255,0.1) 50%,rgba(255,255,255,0.05) 50%,rgba(255,255,255,0.05));
+		background-size:100%;
+		background-position:126px center;
+		padding:0 6px;
+		width:252px;
+		margin:10px 40px;
+		padding:7px 12px 4px 13px;
+		float:left;
+		transition:100ms background-position ease-out;
+
+		&:after {
+			content:'foreground \00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0 background';
+			text-indent:9px;
+			display:block;
+		}
+
+	}
+
+	#upload-type:checked + label {
+		background-position:0px center;
+	}
+
+
+	// add from giphy
+
+	section.giphy {
+		max-width:1232px;
+		width:100%;
+		position:absolute;
+		margin-bottom:120px;
+		transition:200ms transform ease-out;
+	}
+	section.giphy.hidden {
+		transform:translateY(-440px);
+	}
+
+	.giphy.hidden > button.add-giphy {
+		transition:200ms left ease-out;
+		left:-240px;
+		bottom:-60px;
+	}
+
+	.upload:not(.hidden) ~ .giphy.hidden > button.add-giphy {left:0;}
+
+	.giphy.hidden > button.cancel {opacity:0;transform:translateX(0);transition:0ms opacity,100ms background-position ease-out 1000ms;}
+
+	.giphy-zone>div {
+		padding:10px 40px;
+		&:first-of-type {padding-top:40px;}
+		&:empty {display:none;}
+		&.error {font-size:14px;}
+	}
+
+	.upload input, .giphy input {
+		margin:10px 40px;
+		height:40px;
+		padding:5px;
+		width:300px;
+		background:transparent;
+		border-bottom:3px solid rgba(255,255,255,0.05);
+		color:#fff;
+		font-family:$calibre;
+		font-size:18px;
+		display:block;
+	}
+
+	.giphy-zone {
+		font-size:24px;
+		display:block;
+		height:300px;
+		width:100%;
+		position:relative;
+		background:rgba(255,255,255,0.15);
+		transition:100ms background ease-out,
+					200ms transform ease-out;
+
+	}
+
+	.giphy-zone.done, .giphy-zone.hidden {
+		opacity:0;
+		transform:translateY(-100%)
+	}
+
+	//
+
+	.ready ~ section.stickers,
+	.busy ~ section.stickers,
+	.hasimage ~ section.stickers,
+	.uploading ~ section.stickers,
+	.active ~ section.stickers {transform:translateY(380px)}
+
+	.upload.uploading {
+		background-image:url(https://media.giphy.com/media/LYvOrvkuJjxPG/giphy.gif);
+		background-position:center center;
+		background-repeat:no-repeat;
+	}
+
+	// BUTTON PURGATORY
+
+	button {
+		position:relative;
+		bottom:0;
+		float:right;
+		background-color:#4BCBE2;
+		padding:15px 30px;
+		border:0;
+		color:#fff;
+		font-family:$calibre;
+		font-size:24px;
+		transition:100ms opacity ease-out,
+				   100ms background-color ease-out,
+				   100ms padding-right ease-out;
+		cursor:pointer;
+	}
+	button.cancel {
+		background:rgba(255,255,255,0.4);
+		opacity:0.6;
+		transform:translateX(0);
+	}
+	button.upload {
+		background-image: url($loading);
+		background-position: 50% -200%;
+		background-size: 100%;
+		background-repeat: no-repeat;
+	}
+	button.upload:hover,button.add-giphy:hover {background-color:#87D124;}
+	button.cancel:hover {opacity:0.8;}
+
+	button:disabled,button:disabled:hover {background:rgba(255,255,255,0.4);opacity:0.5;}
+
+	.ready ~ button.upload,.busy ~ button.upload {opacity:0;}
+	.hasimage ~ button.upload,.hidden ~ button.upload {opacity:1;z-index:2;}
+	.uploading ~ button.upload {background-position:50% 50%;transition:50ms background-position ease-out;}
+	.done ~ button.upload {
+		background-position: 50% -200%;
+		transition:100ms background-position ease-out 1000ms;
+	}
+	.ready ~ button.cancel,.busy ~ button.cancel {opacity:0.6;transform:translateX(102.5%);transition:0ms opacity;}
+	.giphy-zone.ready ~ button.cancel,.giphy-zone.busy ~ button.cancel {opacity:0.6;transform:translateX(0);transition:0ms opacity;}
+	.hasimage ~ button.cancel {opacity:0.6;transform:translateX(0);transition:100ms transform ease-out 100ms;z-index:0;}
+	.hidden ~ button.cancel {opacity:0;transform:translateX(0);transition:0ms opacity,100ms background-position ease-out 1000ms;}
+
+	.preview-upload-container,#preview-giphy {
+		height:300px;
+		opacity:0;
+		position:absolute;
+		transition:100ms opacity ease-out;
+		right:0;
+		top:0;
+	}
+	.preview-upload-container {
+		max-width:50%;
+		padding:0!important;
+	}
+	.preview-upload-container > img {
+		float:right;
+	}
+	.dropzone.hasimage .preview-upload-container {opacity:1;}
+	#preview-giphy {opacity:1;}
+
+	// stickers
+
+	.stickers {transition:200ms transform ease-out;}
+
+	.sticker {
+		width:288px;
+		height:340px;
+		margin:10px;
+		margin-bottom:120px;
+		background:rgba(255,255,255,0.1);
+		float:left;
+		position:relative;
+		display:flex;
+		flex-direction:columns;
+		justify-content:center;
+		align-items:center;
+		user-select:none;
+
+		img {
+			max-width:288px;
+			max-height:340px;
+		}
+
+		div.options {
+			position:absolute;
+			bottom:-30px;
+			left:0;
+			width:288px;
+			height:30px;
+			//background:rgba(255,255,255,0.05);
+		}
+
+	}
+
+	.sticker div.options {
+
+		input[type=checkbox] {
+			display:none;
+		}
+
+		label {
+			height:30px;
+			display:block;
+			font-size:18px;
+			font-weight:bold;
+			cursor:pointer;
+		}
+
+		.active + label {
+			background-image:repeating-linear-gradient(90deg,#4BCBE2,#4BCBE2 50%,rgba(255,255,255,0.2) 50%,rgba(255,255,255,0.2));
+			background-size:100%;
+			background-position:47px center;
+			padding:0 6px;
+			width:94px;
+			padding:4px 12px 4px 13px;
+			float:left;
+			transition:100ms background-position ease-out;
+
+			&:after {
+				content:'on \00a0\00a0\00a0\00a0\00a0\00a0\00a0 off';
+			}
+
+		}
+
+		.active:checked + label {
+			background-position:0px center;
+		}
+
+		.type + label {
+			width:194px;
+			background-color:rgba(255,255,255,0.05);
+			background-image:url(../images/zigzag.svg);
+			background-size:400%;
+			background-position:50% 60%;
+			float:right;
+			padding:4px;
+			text-align:center;
+			transition:100ms background-size ease-out;
+
+			&:after {
+				content:'background';
+			}
+		}
+
+		.type:checked + label {
+			background-size:800%;
+
+			&:after {
+				content:'foreground';
+			}
+		}
+
+	}
+
+	.sticker div.attribution {
+		position:absolute;
+		bottom:-110px;
+		//height:115px;
+		width:100%;
+		left:0;
+		padding:5px;
+		background:rgba(255,255,255,0.025);
+
+		input[type=text] {
+			height:30px;
+			position:relative;
+			display:block;
+			width:100%;
+			font-size:18px;
+			font-family:$calibre;
+			background:transparent;
+			border-bottom:3px solid rgba(255,255,255,0.05);
+			color:#fff;
+			padding:0 5px;
+			margin-top:5px;
+		}
+
+	}
+
+	.sticker a.delete {
+		position:absolute;
+		top:0;
+		left:0;
+		background:#e9254a;
+		color:#fff;
+		font-size:14px;
+		height:30px;
+		line-height:31px;
+		width:100%;
+		text-align:center;
+		display:none;
+		opacity:0;
+		transition:opacity 100ms ease-out;
+		cursor:pointer;
+	}
+
+	.danger .sticker a.delete {display:block;}
+	.danger .sticker:hover a.delete {opacity:1;}
+
+
+	// FILTERS
+
+	.filters {
+		margin: 10px 10px 70px 10px;
+		user-select:none;
+
+		input[type=radio],
+		input[type=checkbox] {
+			display:none;
+		}
+
+		p {font-size:24px;margin-bottom:12px;}
+
+		form {
+			background:rgba(255,255,255,0.1);
+			display:flex;
+			justify-content:center;
+			align-items:center;
+			width:288px;
+			height:40px;
+			float:left;
+			margin-right:20px;
+		}
+
+		input + label {
+			padding:4px;
+			display:block;
+			flex-grow:1;
+			text-align:center;
+			line-height:31px;
+			height:40px;
+			font-size:18px;
+			transition:background 100ms ease-out;
+			cursor:pointer;
+		}
+
+		input:checked + label {
+			background:#4BCBE2;
+		}
+
+		form.danger-mode {
+			float:right;
+			width:110px;
+			margin-right:0;
+			background:none;
+
+			label {
+				font-size:14px;
+				line-height:32px;
+				background:none;
+				color:rgba(255,255,255,0.5);
+			}
+
+			input:checked + label {
+				background:#e9254a;
+				color:#fff;
+			}
+		}
+	}
+
+}
+
+@media screen and (max-height: 600px) {
+	body.holodeck {
+		overflow-y:scroll;
+		padding-bottom:20px;
+		height:auto;
+	}
+}
+
+@media screen and (max-width:1231px) {
+ 	body.holodeck,body.holodeck section.giphy,body.holodeck section.upload {max-width:924px;}
+}
+@media screen and (max-width:923px) {
+ 	body.holodeck,body.holodeck section.giphy,body.holodeck section.upload {max-width:616px;}
+}
+@media screen and (max-width:615px) {
+ 	body.holodeck,body.holodeck section.giphy,body.holodeck section.upload {max-width:308px;}
+}
